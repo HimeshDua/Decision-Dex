@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 export function SignUpForm() {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +29,7 @@ export function SignUpForm() {
         try {
             const res = await fetch('/api/signup', {
                 method: 'POST',
-                body: JSON.stringify({ name: "ds", email, password }),
+                body: JSON.stringify({ name, email, password }),
                 headers: { 'Content-Type': 'application/json' }
             });
 
@@ -67,12 +68,24 @@ export function SignUpForm() {
             <CardContent className="grid gap-4">
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <div className="grid gap-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                        id="name"
+                        type="text"
+                        placeholder="John Doe"
+                        value={name}
+                        autoComplete="name"
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                         id="email"
                         type="email"
                         placeholder="you@example.com"
                         value={email}
+                        autoComplete="email"
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
@@ -81,6 +94,8 @@ export function SignUpForm() {
                     <Input
                         id="password"
                         type="password"
+                        placeholder="••••••••"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -105,7 +120,7 @@ export function SignUpForm() {
                 </Button> */}
                 <p className="text-xs text-muted-foreground mt-2">
                     Already have an account?{" "}
-                    <Link href="/sign-in" className="text-blue-500 hover:underline">
+                    <Link href="/signin" className="text-blue-500 hover:underline">
                         Sign in
                     </Link>
                 </p>

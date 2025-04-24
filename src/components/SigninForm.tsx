@@ -56,6 +56,8 @@ export function SignInForm() {
                         type="email"
                         placeholder="you@example.com"
                         value={email}
+                        autoCapitalize="none"
+                        autoComplete="email"
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
@@ -64,6 +66,9 @@ export function SignInForm() {
                     <Input
                         id="password"
                         type="password"
+                        placeholder="••••••••"
+                        autoCapitalize="none"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />

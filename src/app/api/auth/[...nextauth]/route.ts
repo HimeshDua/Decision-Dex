@@ -40,8 +40,8 @@ const handler = NextAuth({
     strategy: 'jwt'
   },
   pages: {
-    signIn: '/signin', // Optional: custom signin page
-    error: '/signin' // Redirect error to signin with error param
+    signIn: '/signin',
+    error: '/auth/error'
   },
   callbacks: {
     async jwt({token, user}) {

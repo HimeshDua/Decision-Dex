@@ -12,7 +12,7 @@ export default function HeroSection() {
                 <div className="mt-8 text-lg text-muted-foreground max-w-xl mx-auto">
                     <p className="mb-4">
                         Not sure if you should eat that leftover pizza or go to the gym? <br />
-                        Yeah, we’ve all been there. Decision Dex helps you weigh your options—minus the existential crisis.
+                        Yeah, we've all been there. Decision Dex helps you weigh your options—minus the existential crisis.
                     </p>
                 </div>
 
