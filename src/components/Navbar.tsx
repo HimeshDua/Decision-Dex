@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 export default function Navbar() {
 
     const { status } = useSession();
-
     return (
         <nav className="w-full bg-foreground border-b border-border text-foreground">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">

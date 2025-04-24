@@ -1,5 +1,4 @@
 'use client';
-
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type User = {
@@ -28,6 +27,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
 export const useGlobalContext = () => {
     const context = useContext(GlobalContext);
-    if (!context) throw new Error('useGlobalContext must be used inside GlobalProvider');
+    if (!context)
+        throw new Error('useGlobalContext must be used inside GlobalProvider');
     return context;
 };

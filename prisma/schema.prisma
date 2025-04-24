@@ -18,38 +18,64 @@ model User {
 }
 
 model Decision {
-  id           String    @id @default(cuid()) // Unique ID for each decision
-  title        String    @default("Untitled Decision") // Default title, can be edited by user
-  labelAuto    Boolean   @default(true) // Toggle for automatic or manual labeling
-  userDecision String // The user's decision (input text)
-  aiDecision   String? // AI's decision (optional, generated later)
-  userId       String // Foreign key to link decision with the user
-  user         User      @relation(fields: [userId], references: [id]) // Relation with User
-  pros         Pro[] // List of pros related to the decision (array of Pro models)
-  cons         Con[] // List of cons related to the decision (array of Con models)
-  comments     Comment[] // List of comments (array of Comment models)
-  createdAt    DateTime  @default(now()) // Timestamp when the decision was created
-  updatedAt    DateTime  @updatedAt // Timestamp when the decision was last updated
+  id           String    @id @default(cuid())
+  title        String    @default("Untitled Decision")
+  labelAuto    Boolean   @default(true)
+  userDecision String
+  aiDecision   String?
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  pros         Pro[]
+  cons         Con[]
+  comments     Comment[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Option       Option[]
 }
 
 model Pro {
   id         String   @id @default(cuid())
-  content    String // Content of the pro (user input)
-  decisionId String // Foreign key linking pro to a decision
-  decision   Decision @relation(fields: [decisionId], references: [id]) // Relation with Decision
+  content    String
+  decisionId String
+  decision   Decision @relation(fields: [decisionId], references: [id])
 }
 
 model Con {
   id         String   @id @default(cuid())
-  content    String // Content of the con (user input)
-  decisionId String // Foreign key linking con to a decision
-  decision   Decision @relation(fields: [decisionId], references: [id]) // Relation with Decision
+  content    String
+  decisionId String
+  decision   Decision @relation(fields: [decisionId], references: [id])
 }
 
 model Comment {
   id         String   @id @default(cuid())
-  text       String // The content of the comment
-  decisionId String // Foreign key linking comment to a decision
-  decision   Decision @relation(fields: [decisionId], references: [id]) // Relation with Decision
-  createdAt  DateTime @default(now()) // Timestamp when the comment was made
+  text       String
+  decisionId String
+  decision   Decision @relation(fields: [decisionId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Option {
+  id         String      @id @default(cuid())
+  title      String
+  reason     String?
+  rank       Int?
+  decisionId String
+  decision   Decision    @relation(fields: [decisionId], references: [id])
+  pros       ProOption[]
+  cons       ConOption[]
+}
+
+model ProOption {
+  id       String @id @default(cuid())
+  content  String
+  optionId String
+  option   Option @relation(fields: [optionId], references: [id])
+}
+
+model ConOption {
+  id       String @id @default(cuid())
+  content  String
+  optionId String
+  option   Option @relation(fields: [optionId], references: [id])
 }
