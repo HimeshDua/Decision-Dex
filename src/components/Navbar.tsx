@@ -4,7 +4,23 @@ export default function Navbar() {
     return (
         <nav className="w-full bg-foreground border-b border-border text-foreground">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-                <Link href="/">
+                <Link href="/" className='flex items-center space-x-2'>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mr-2 h-4 w-4 text-background"
+                    >
+                        <path d="M20.29 11.71A6 6 0 0 0 12 6a6 6 0 0 0-8.29 11.71"></path>
+                        <path d="M18 18v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1"></path>
+                        <path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                    </svg>
                     <h1 className="text-xl font-semibold text-background tracking-tight ">
                         Decision Dex
                     </h1>

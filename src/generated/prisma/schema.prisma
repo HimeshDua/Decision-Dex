@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Decision  Decision[]
+}
+
+model Decision {
+  id           String    @id @default(cuid()) // Unique ID for each decision
+  title        String    @default("Untitled Decision") // Default title, can be edited by user
+  labelAuto    Boolean   @default(true) // Toggle for automatic or manual labeling
+  userDecision String // The user's decision (input text)
+  aiDecision   String? // AI's decision (optional, generated later)
+  userId       String // Foreign key to link decision with the user
+  user         User      @relation(fields: [userId], references: [id]) // Relation with User
+  pros         Pro[] // List of pros related to the decision (array of Pro models)
+  cons         Con[] // List of cons related to the decision (array of Con models)
+  comments     Comment[] // List of comments (array of Comment models)
+  createdAt    DateTime  @default(now()) // Timestamp when the decision was created
+  updatedAt    DateTime  @updatedAt // Timestamp when the decision was last updated
+}
+
+model Pro {
+  id         String   @id @default(cuid())
+  content    String // Content of the pro (user input)
+  decisionId String // Foreign key linking pro to a decision
+  decision   Decision @relation(fields: [decisionId], references: [id]) // Relation with Decision
+}
+
+model Con {
+  id         String   @id @default(cuid())
+  content    String // Content of the con (user input)
+  decisionId String // Foreign key linking con to a decision
+  decision   Decision @relation(fields: [decisionId], references: [id]) // Relation with Decision
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  text       String // The content of the comment
+  decisionId String // Foreign key linking comment to a decision
+  decision   Decision @relation(fields: [decisionId], references: [id]) // Relation with Decision
+  createdAt  DateTime @default(now()) // Timestamp when the comment was made
+}

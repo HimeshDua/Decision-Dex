@@ -17,13 +17,13 @@ export default function HeroSection() {
                 </div>
 
                 <div className="border-0 border-t-2 flex flex-row gap-6 items-center justify-center mt-8 pt-8">
-                    <Link href="/login">
+                    <Link href="signin">
                         <Button variant="outline" className="text-base">
                             Enter the Decision Matrix
                         </Button>
                     </Link>
 
-                    <Link href="/signup">
+                    <Link href="signup">
                         <Button className="text-base">
                             Get Started (No IQ Test Required)
                         </Button>
