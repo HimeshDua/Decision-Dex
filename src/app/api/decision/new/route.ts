@@ -11,12 +11,13 @@ export async function POST(req: Request) {
   }
 
   try {
-    const {title, description: userDecision, options} = decision;
+    const {title, description: userDecision, options, status} = decision;
 
     const newDecision = await prisma.decision.create({
       data: {
         title: title || 'Untitled Decision',
         userDecision,
+        status: status || 'Pending',
         user: {connect: {id: userId}},
         options: {
           create: options.map((option: any) => ({

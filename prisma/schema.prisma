@@ -18,16 +18,17 @@ model User {
 }
 
 model Decision {
-  id           String    @id @default(uuid())
-  title        String    @default("Untitled Decision")
-  labelAuto    Boolean   @default(true)
+  id           String        @id @default(uuid())
+  title        String        @default("Untitled Decision")
+  labelAuto    Boolean       @default(true)
   userDecision String
-  aiDecision   String?
+  // aiDecision   String?
+  status       statusOptions @default(Pending)
   userId       String
-  user         User      @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
   comments     Comment[]
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   options      Option[]
 
   @@index([title])
@@ -62,4 +63,10 @@ model ConOption {
   content  String
   optionId String
   option   Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
+}
+
+enum statusOptions {
+  Pending
+  InProgress
+  Completed
 }

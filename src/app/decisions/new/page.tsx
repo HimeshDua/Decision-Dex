@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { useGlobalContext } from '@/context/GlobalProvider';
 import { useSession } from 'next-auth/react';
 
 type Option = {
@@ -17,18 +16,17 @@ type Option = {
     cons: string[];
 };
 
-// const { user } = useGlobalContext();
-// console.log("User in new decision page", user);
-
 export default function NewDecisionPage() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [status, setStatus] = useState('Pending');
     const [options, setOptions] = useState<Option[]>([{
         id: 1,
         title: '',
         pros: [''],
         cons: ['']
     }]);
+
     const userId = useSession().data?.user.id;
 
     // Option handlers
@@ -60,7 +58,7 @@ export default function NewDecisionPage() {
     };
 
     const handleSubmit = async () => {
-        const decision = { title, description, options };
+        const decision = { title, description, options, status };
         console.log("Frontend decision", decision);
         try {
             const res = await fetch('/api/decision/new', {
@@ -180,6 +178,16 @@ export default function NewDecisionPage() {
                         <Button variant="outline" onClick={addOption}>
                             <PlusIcon className="w-4 h-4 mr-2" /> Add Option
                         </Button>
+                        <div className="flex items-center gap-3">
+                            <select onChange={
+                                (e) => setStatus(e.target.value)
+                            } className="border rounded-md p-2">
+                                <option value="Pending">Pending</option>
+                                <option value="InProgress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+
                         <Button onClick={handleSubmit}>Submit</Button>
                     </div>
                 </div>
