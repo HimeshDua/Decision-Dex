@@ -2,12 +2,57 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
 export default function Navbar() {
-
     const { status } = useSession();
+
+    if (status === 'loading') {
+        return (
+            <nav className="w-full bg-foreground border-b border-border text-foreground">
+                <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+                    <Link href="/" className='flex items-center space-x-2 cursor-default'>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="mr-2 h-4 w-4 text-background"
+                        >
+                            <path d="M20.29 11.71A6 6 0 0 0 12 6a6 6 0 0 0-8.29 11.71"></path>
+                            <path d="M18 18v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1"></path>
+                            <path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                        </svg>
+                        <h1 className="text-xl font-semibold text-background tracking-tight ">
+                            Decision Dex
+                        </h1>
+                    </Link>
+
+                    {/* Navigation links with staggered animations */}
+                    <div className="flex space-x-6">
+                        {[...Array(3)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="relative overflow-hidden"
+                                style={{ animationDelay: `${i * 0.1}s` }}
+                            >
+                                <div className="h-6 w-20 bg-background/20 rounded" />
+                                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-background/0 via-background/50 to-background/0 animate-shimmer" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </nav>
+        );
+    }
+
     return (
         <nav className="w-full bg-foreground border-b border-border text-foreground">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-                <Link href="/" className='flex items-center space-x-2'>
+                <Link href="/" className='flex items-center space-x-2 cursor-default'>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -30,7 +75,6 @@ export default function Navbar() {
                 </Link>
 
                 {status === 'authenticated' ? (
-
                     <ul className="flex space-x-6 text-sm font-medium">
                         <li>
                             <Link
@@ -76,9 +120,8 @@ export default function Navbar() {
                             </Link>
                         </li>
                     </ul>
-                )
-                }
+                )}
             </div>
-        </nav >
+        </nav>
     );
 }

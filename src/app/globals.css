@@ -134,3 +134,13 @@
   background-size: 400% 400%;
   animation: shine-theme 4s linear infinite;
 }
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+  opacity: 0.2;
+}

@@ -7,252 +7,155 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 
+type Option = {
+    id: number;
+    title: string;
+    pros: string[];
+    cons: string[];
+};
+
 export default function NewDecisionPage() {
     const [title, setTitle] = useState('');
-    const [userDecision, setUserDecision] = useState('');
-    const [options, setOptions] = useState([
-        {
-            id: 1,
-            title: '',
-            pros: [''],
-            cons: ['']
-        }
-    ]);
+    const [description, setDescription] = useState('');
+    const [options, setOptions] = useState<Option[]>([{
+        id: 1,
+        title: '',
+        pros: [''],
+        cons: ['']
+    }]);
 
-    const handleAddOption = () => {
-        setOptions([
-            ...options,
-            {
-                id: Date.now(), // Use a more reliable unique ID
-                title: '',
-                pros: [''],
-                cons: ['']
-            }
-        ]);
+    // Option handlers
+    const addOption = () => setOptions([...options, { id: Date.now(), title: '', pros: [''], cons: [''] }]);
+    const removeOption = (index: number) => setOptions(options.filter((_, i) => i !== index));
+    const updateOption = (index: number, field: keyof Option, value: string) => {
+        const updated: any = [...options];
+        updated[index][field] = value;
+        setOptions(updated);
     };
 
-    const handleRemoveOption = (index) => {
-        const newOptions = options.filter((_, i) => i !== index);
-        setOptions(newOptions);
+    // List item handlers (pros/cons)
+    const updateListItem = (optionIndex: number, type: 'pros' | 'cons', listIndex: number, value: string) => {
+        const updated = [...options];
+        updated[optionIndex][type][listIndex] = value;
+        setOptions(updated);
     };
 
-    const handleChangeOption = (index, field, value) => {
-        const newOptions = [...options];
-        newOptions[index][field] = value;
-        setOptions(newOptions);
+    const addListItem = (optionIndex: number, type: 'pros' | 'cons') => {
+        const updated = [...options];
+        updated[optionIndex][type].push('');
+        setOptions(updated);
     };
 
-    const handleChangeList = (optionIndex, type, listIndex, value) => {
-        const newOptions = [...options];
-        newOptions[optionIndex][type][listIndex] = value;
-        setOptions(newOptions);
-    };
-
-    const handleAddListItem = (optionIndex, type) => {
-        const newOptions = [...options];
-        newOptions[optionIndex][type].push('');
-        setOptions(newOptions);
-    };
-
-    const handleRemoveListItem = (optionIndex, type, listIndex) => {
-        const newOptions = [...options];
-        newOptions[optionIndex][type] = newOptions[optionIndex][type].filter(
-            (_, i) => i !== listIndex
-        );
-        setOptions(newOptions);
+    const removeListItem = (optionIndex: number, type: 'pros' | 'cons', listIndex: number) => {
+        const updated = [...options];
+        updated[optionIndex][type] = updated[optionIndex][type].filter((_, i) => i !== listIndex);
+        setOptions(updated);
     };
 
     const handleSubmit = () => {
-        // Implement your submit logic here
-        console.log({ title, userDecision, options });
-        alert('Decision submitted (check console for data)');
+        console.log({ title, description, options });
+        alert('Decision submitted!');
     };
 
     return (
-        <div className="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold mb-8 text-foreground">
-                Create a New Decision
-            </h1>
-            <Card className="bg-card shadow-lg border border-border rounded-xl p-6">
-                <div>
-                    <Label
-                        htmlFor="title"
-                        className="block text-sm font-medium text-muted-foreground"
-                    >
-                        Title
-                    </Label>
-                    <Input
-                        id="title"
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Should I switch careers?"
-                        className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-ring focus:border-ring border-input bg-background text-foreground rounded-md"
-                    />
-                </div>
-                <div>
-                    <Label
-                        htmlFor="userDecision"
-                        className="block text-sm font-medium text-muted-foreground"
-                    >
-                        Your Initial Thoughts
-                    </Label>
-                    <Textarea
-                        id="userDecision"
-                        value={userDecision}
-                        onChange={(e) => setUserDecision(e.target.value)}
-                        placeholder="What are you leaning towards?"
-                        rows={3}
-                        className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-ring focus:border-ring border-input bg-background text-foreground rounded-md"
-                    />
-                </div>
+        <div className="max-w-4xl mx-auto p-4 sm:p-6">
+            <h1 className="text-3xl font-bold mb-6">Create Decision</h1>
 
+            <Card className="p-6">
                 <div className="space-y-6">
+                    <div>
+                        <Label>Title</Label>
+                        <Input
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Decision title"
+                        />
+                    </div>
+
+                    <div>
+                        <Label>Description</Label>
+                        <Textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Describe your decision"
+                            rows={3}
+                        />
+                    </div>
+
                     {options.map((option, idx) => (
-                        <Card key={option.id} className="p-6 bg-card border-border">
-                            <CardContent className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <Label
-                                        htmlFor={`option-title-${option.id}`}
-                                        className="block text-xl font-semibold mb-2 text-foreground"
-                                    >
-                                        Option {idx + 1}
-                                    </Label>
-                                    {options.length > 1 && (
-                                        <Button
-                                            size="icon"
-                                            variant="destructive"
-                                            onClick={() => handleRemoveOption(idx)}
-                                            className="focus:outline-none"
-                                        >
-                                            <TrashIcon className="h-4 w-4" />
+                        <Card key={option.id} className="p-4">
+                            <div className="flex justify-between items-center mb-3">
+                                <h3 className="font-medium">Option {idx + 1}</h3>
+                                {options.length > 1 && (
+                                    <Button variant="ghost" size="sm" onClick={() => removeOption(idx)}>
+                                        <TrashIcon className="w-4 h-4" />
+                                    </Button>
+                                )}
+                            </div>
+
+                            <Input
+                                value={option.title}
+                                onChange={(e) => updateOption(idx, 'title', e.target.value)}
+                                placeholder="Option title"
+                                className="mb-4"
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <Label>Pros</Label>
+                                    <div className="space-y-2">
+                                        {option.pros.map((pro, proIdx) => (
+                                            <div key={proIdx} className="flex gap-2">
+                                                <Input
+                                                    value={pro}
+                                                    onChange={(e) => updateListItem(idx, 'pros', proIdx, e.target.value)}
+                                                    placeholder={`Pro ${proIdx + 1}`}
+                                                />
+                                                {option.pros.length > 1 && (
+                                                    <Button variant="ghost" size="sm" onClick={() => removeListItem(idx, 'pros', proIdx)}>
+                                                        <TrashIcon className="w-4 h-4" />
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <Button variant="outline" size="sm" onClick={() => addListItem(idx, 'pros')}>
+                                            <PlusIcon className="w-4 h-4 mr-2" /> Add Pro
                                         </Button>
-                                    )}
-                                </div>
-                                <Input
-                                    id={`option-title-${option.id}`}
-                                    type="text"
-                                    value={option.title}
-                                    onChange={(e) =>
-                                        handleChangeOption(idx, 'title', e.target.value)
-                                    }
-                                    placeholder={`Title of option ${idx + 1}`}
-                                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-ring focus:border-ring border-input bg-background text-foreground rounded-md"
-                                />
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <Label className="block text-sm font-medium text-muted-foreground">
-                                            Pros
-                                        </Label>
-                                        <div className="space-y-2">
-                                            {option.pros.map((pro, proIdx) => (
-                                                <div
-                                                    key={`pro-${option.id}-${proIdx}`}
-                                                    className="flex items-center space-x-2"
-                                                >
-                                                    <Input
-                                                        type="text"
-                                                        value={pro}
-                                                        onChange={(e) =>
-                                                            handleChangeList(
-                                                                idx,
-                                                                'pros',
-                                                                proIdx,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder={`Pro ${proIdx + 1}`}
-                                                        className="w-full shadow-sm sm:text-sm focus:ring-ring focus:border-ring border-input bg-background text-foreground rounded-md"
-                                                    />
-                                                    {option.pros.length > 1 && (
-                                                        <Button
-                                                            size="icon"
-                                                            variant="destructive"
-                                                            onClick={() =>
-                                                                handleRemoveListItem(idx, 'pros', proIdx)
-                                                            }
-                                                            className="focus:outline-none"
-                                                        >
-                                                            <TrashIcon className="h-4 w-4" />
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => handleAddListItem(idx, 'pros')}
-                                                className="w-full justify-start"
-                                            >
-                                                <PlusIcon className="h-4 w-4 mr-2" /> Add Pro
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <Label className="block text-sm font-medium text-muted-foreground">
-                                            Cons
-                                        </Label>
-                                        <div className="space-y-2">
-                                            {option.cons.map((con, conIdx) => (
-                                                <div
-                                                    key={`con-${option.id}-${conIdx}`}
-                                                    className="flex items-center space-x-2"
-                                                >
-                                                    <Input
-                                                        type="text"
-                                                        value={con}
-                                                        onChange={(e) =>
-                                                            handleChangeList(
-                                                                idx,
-                                                                'cons',
-                                                                conIdx,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder={`Con ${conIdx + 1}`}
-                                                        className="w-full shadow-sm sm:text-sm focus:ring-ring focus:border-ring border-input bg-background text-foreground rounded-md"
-                                                    />
-                                                    {option.cons.length > 1 && (
-                                                        <Button
-                                                            size="icon"
-                                                            variant="destructive"
-                                                            onClick={() =>
-                                                                handleRemoveListItem(idx, 'cons', conIdx)
-                                                            }
-                                                            className="focus:outline-none"
-                                                        >
-                                                            <TrashIcon className="h-4 w-4" />
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => handleAddListItem(idx, 'cons')}
-                                                className="w-full justify-start"
-                                            >
-                                                <PlusIcon className="h-4 w-4 mr-2" /> Add Con
-                                            </Button>
-                                        </div>
                                     </div>
                                 </div>
-                            </CardContent>
+
+                                <div>
+                                    <Label>Cons</Label>
+                                    <div className="space-y-2">
+                                        {option.cons.map((con, conIdx) => (
+                                            <div key={conIdx} className="flex gap-2">
+                                                <Input
+                                                    value={con}
+                                                    onChange={(e) => updateListItem(idx, 'cons', conIdx, e.target.value)}
+                                                    placeholder={`Con ${conIdx + 1}`}
+                                                />
+                                                {option.cons.length > 1 && (
+                                                    <Button variant="ghost" size="sm" onClick={() => removeListItem(idx, 'cons', conIdx)}>
+                                                        <TrashIcon className="w-4 h-4" />
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <Button variant="outline" size="sm" onClick={() => addListItem(idx, 'cons')}>
+                                            <PlusIcon className="w-4 h-4 mr-2" /> Add Con
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
                         </Card>
                     ))}
-                </div>
 
-                <div className="mt-6 flex space-x-4">
-                    <Button
-                        variant="outline"
-                        onClick={handleAddOption}
-                        className="flex items-center"
-                    >
-                        <PlusIcon className="h-4 w-4 mr-2" /> Add Option
-                    </Button>
-                    <Button type="submit" onClick={handleSubmit}>
-                        Submit Decision
-                    </Button>
+                    <div className="flex gap-3">
+                        <Button variant="outline" onClick={addOption}>
+                            <PlusIcon className="w-4 h-4 mr-2" /> Add Option
+                        </Button>
+                        <Button onClick={handleSubmit}>Submit</Button>
+                    </div>
                 </div>
             </Card>
         </div>
