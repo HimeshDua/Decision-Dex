@@ -3,9 +3,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { PlusIcon, TrashIcon } from 'lucide-react';
+import { nanoid } from 'nanoid';
+import { useGlobalContext } from '@/context/GlobalProvider';
+import { useSession } from 'next-auth/react';
 
 type Option = {
     id: number;
@@ -13,6 +16,9 @@ type Option = {
     pros: string[];
     cons: string[];
 };
+
+// const { user } = useGlobalContext();
+// console.log("User in new decision page", user);
 
 export default function NewDecisionPage() {
     const [title, setTitle] = useState('');
@@ -23,9 +29,10 @@ export default function NewDecisionPage() {
         pros: [''],
         cons: ['']
     }]);
+    const userId = useSession().data?.user.id;
 
     // Option handlers
-    const addOption = () => setOptions([...options, { id: Date.now(), title: '', pros: [''], cons: [''] }]);
+    const addOption = () => setOptions([...options, { id: Number(nanoid()), title: '', pros: [''], cons: [''] }]);
     const removeOption = (index: number) => setOptions(options.filter((_, i) => i !== index));
     const updateOption = (index: number, field: keyof Option, value: string) => {
         const updated: any = [...options];
@@ -52,8 +59,27 @@ export default function NewDecisionPage() {
         setOptions(updated);
     };
 
-    const handleSubmit = () => {
-        console.log({ title, description, options });
+    const handleSubmit = async () => {
+        const decision = { title, description, options };
+        console.log("Frontend decision", decision);
+        try {
+            const res = await fetch('/api/decision/new', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ decision, userId })
+            });
+            const resData = await res.json();
+            if (!res.ok) {
+                alert(`Error: ${resData.message}`);
+
+            } else {
+                alert('Decision submitted!');
+            }
+        } catch (error) {
+            console.error('Error submitting decision:', error);
+            alert('Error submitting decision. Please try again.');
+            return;
+        }
         alert('Decision submitted!');
     };
 

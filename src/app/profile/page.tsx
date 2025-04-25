@@ -21,6 +21,7 @@ export default function Dashboard() {
     return (
         <div>
             <h1>Welcome {session.user?.name}</h1>
+            <p>User Id: {session.user?.id}</p>
             <p>Email: {session.user?.email}</p>
             <p>Expires at: {session.expires}</p>
 
