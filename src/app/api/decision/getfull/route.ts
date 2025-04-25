@@ -17,9 +17,6 @@ export async function POST(req: Request) {
     const getDecision = await prisma.decision.findMany({
       where: {userId},
       orderBy: {createdAt: 'desc'}
-      // select: {
-      //   options: true,
-      // }
     });
 
     if (!getDecision) {
