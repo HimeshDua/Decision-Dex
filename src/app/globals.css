@@ -144,3 +144,20 @@
   animation: shimmer 1.5s infinite;
   opacity: 0.2;
 }
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-shift {
+  animation: gradientShift 6s ease infinite;
+  background-size: 200% 200%;
+}

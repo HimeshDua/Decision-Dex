@@ -56,6 +56,7 @@ export default function DecisionsPage() {
 
             if (res.ok) {
                 const data = await res.json();
+                console.log("decisions array", data)
                 setDecisions(data);
             } else {
                 console.error('Failed to fetch decisions');
