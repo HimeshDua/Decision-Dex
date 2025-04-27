@@ -4,8 +4,8 @@ import DecisionDetail from '@/components/DecisionClient';
 import DecisionShell from '@/components/DecisionShell';
 import { prisma } from '@/lib/prisma';
 
-export default async function DecisionPage({ params }: { params: { id: string } }) {
-    const { id } = await params;
+export default async function DecisionPage({ params }: { params: { id: Promise<any> } }) {
+    const id = await params.id;
     const decision = await prisma.decision.findUnique({
         where: { id: id },
         include: {
