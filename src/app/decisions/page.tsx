@@ -30,8 +30,8 @@ export default function DecisionsPage() {
         return (
             <div className="text-center py-10">
                 <h1 className="text-3xl font-bold tracking-tight mb-4">You are not logged in</h1>
-                <Link href="/login">
-                    <Button className="flex gap-2">Login</Button>
+                <Link href="/signin">
+                    <Button className="flex gap-2">Sign In</Button>
                 </Link>
             </div>
         );
@@ -66,7 +66,7 @@ export default function DecisionsPage() {
         };
 
         fetchData();
-    }, [sessionStatus]);
+    }, [sessionStatus === "authenticated"]);
 
     return (
         <section className="p-6 max-w-6xl mx-auto">

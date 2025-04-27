@@ -42,12 +42,13 @@ export default function ProfilePage() {
         fetchData();
     }, [sessionStatus]);
 
+
     if (sessionStatus === 'unauthenticated') {
         return (
-            <div className="text-center py-10">
-                <h1 className="text-3xl font-bold tracking-tight mb-4">You are not logged in</h1>
-                <Link href="/login">
-                    <Button className="flex gap-2">Login</Button>
+            <div className="max-w-6xl mx-auto px-4 py-12 text-center flex justify-center items-center">
+                <h1 className="text-2xl font-bold mb-4">Please sign in to view your dashboard</h1>
+                <Link href="/signin">
+                    <Button>Sign In</Button>
                 </Link>
             </div>
         );
