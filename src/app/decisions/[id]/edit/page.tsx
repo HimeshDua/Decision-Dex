@@ -1,7 +1,5 @@
 "use server"
-// In your page.tsx (Server Component)
 import DecisionDetail from '@/components/DecisionClient';
-import DecisionShell from '@/components/DecisionShell';
 import { prisma } from '@/lib/prisma';
 
 export default async function DecisionPage({ params }: { params: { id: string } }) {
@@ -21,6 +19,6 @@ export default async function DecisionPage({ params }: { params: { id: string } 
     if (!decision) {
         return <div>Decision not found</div>;
     }
-    return <DecisionShell decision={decision} />
-    // return <DecisionDetail decision={decision} />;
+
+    return <DecisionDetail decision={decision} />;
 }
