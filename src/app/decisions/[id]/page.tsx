@@ -1,11 +1,9 @@
 "use server"
-// In your page.tsx (Server Component)
-import DecisionDetail from '@/components/DecisionClient';
 import DecisionShell from '@/components/DecisionShell';
 import { prisma } from '@/lib/prisma';
 
-export default async function DecisionPage({ params }: { params: { id: Promise<any> } }) {
-    const id = await params.id;
+export default async function DecisionPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
     const decision = await prisma.decision.findUnique({
         where: { id: id },
         include: {
@@ -22,5 +20,4 @@ export default async function DecisionPage({ params }: { params: { id: Promise<a
         return <div>Decision not found</div>;
     }
     return <DecisionShell decision={decision} />
-    // return <DecisionDetail decision={decision} />;
 }
