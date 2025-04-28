@@ -50,15 +50,17 @@ export default function ProfilePage() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-12">
-                <Loader2 size={24} className="animate-spin" />
-                <p className="mt-2 text-muted-foreground">Loading profile...</p>
-            </div>
+            <section className="h-full min-h-[94vh] flex justify-center items-center mx-auto">
+                <div className="flex flex-col md:flex-row gap-8">
+                    <Loader2 size={24} className="animate-spin" />
+                    <p className="mt-2 text-muted-foreground">Loading profile...</p>
+                </div>
+            </section>
         );
     }
 
     return (
-        <section className="p-6 max-w-6xl mx-auto">
+        <section className="p-6 h-full min-h-[94vh] flex justify-center items-center mx-auto">
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Profile Section */}
                 <div className="w-full md:w-1/3">

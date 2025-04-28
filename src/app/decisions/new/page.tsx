@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import UnAuthenticatedPage from '@/components/UnAuthenticatedPage';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type Option = {
     id: number;
@@ -90,12 +90,12 @@ export default function NewDecisionPage() {
     }
     return (
         <div className="max-w-4xl mx-auto p-4 sm:p-6">
-            <h1 className="text-3xl font-bold mb-6">Create Decision</h1>
+            <h1 className="text-3xl font-bold mb-6">Make Decision</h1>
 
             <Card className="p-6">
                 <div className="space-y-6">
                     <div>
-                        <Label>Title</Label>
+                        <Label className="mb-2">Title</Label>
                         <Input
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -104,7 +104,7 @@ export default function NewDecisionPage() {
                     </div>
 
                     <div>
-                        <Label>Description</Label>
+                        <Label className="mb-2">Description</Label>
                         <Textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -133,7 +133,7 @@ export default function NewDecisionPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <Label>Pros</Label>
+                                    <Label className="mb-2">Pros</Label>
                                     <div className="space-y-2">
                                         {option.pros.map((pro, proIdx) => (
                                             <div key={proIdx} className="flex gap-2">
@@ -156,7 +156,7 @@ export default function NewDecisionPage() {
                                 </div>
 
                                 <div>
-                                    <Label>Cons</Label>
+                                    <Label className="mb-2">Cons</Label>
                                     <div className="space-y-2">
                                         {option.cons.map((con, conIdx) => (
                                             <div key={conIdx} className="flex gap-2">
@@ -181,22 +181,30 @@ export default function NewDecisionPage() {
                         </Card>
                     ))}
 
-                    <div className="flex gap-3">
-                        <Button variant="outline" onClick={addOption}>
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3">
+                        <Button variant="outline" className='w-full' onClick={addOption}>
                             <PlusIcon className="w-4 h-4 mr-2" /> Add Option
                         </Button>
-                        <div className="flex items-center gap-3">
-                            <select onChange={
-                                (e) => setStatus(e.target.value)
-                            } className="border rounded-md p-2">
-                                <option value="Pending">Pending</option>
-                                <option value="InProgress">In Progress</option>
-                                <option value="Completed">Completed</option>
-                            </select>
+
+                        <div className="w-full"> {/* Wrap the Select to control its width in the grid */}
+                            <Select onValueChange={(value) => setStatus(value)}>
+                                <SelectTrigger className="w-full"> {/* Make the trigger full width */}
+                                    <SelectValue placeholder="Pending" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Decision Status</SelectLabel>
+                                        <SelectItem value="Pending">Pending</SelectItem>
+                                        <SelectItem value="InProgress">In Progress</SelectItem>
+                                        <SelectItem value="Completed">Completed</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
 
-                        <Button onClick={handleSubmit}>Submit</Button>
+                        <Button className='w-full col-span-2 sm:col-span-1' onClick={handleSubmit}>Submit</Button>
                     </div>
+
                 </div>
             </Card>
         </div>
