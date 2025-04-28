@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Edit, PlusCircle, CircleDot, FileText, Loader2, User as UserIcon, Calendar, Mail } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import UnAuthenticatedPage from '@/components/UnAuthenticatedPage';
 
 export default function ProfilePage() {
     const [user, setUser] = useState<any>(null);
@@ -44,14 +45,7 @@ export default function ProfilePage() {
 
 
     if (sessionStatus === 'unauthenticated') {
-        return (
-            <div className="max-w-6xl mx-auto px-4 py-12 text-center flex-col gap-12 flex justify-center items-center">
-                <h1 className="text-2xl font-bold mb-4">Please sign in to view your dashboard</h1>
-                <Link href="/signin">
-                    <Button>Sign In</Button>
-                </Link>
-            </div>
-        );
+        return <UnAuthenticatedPage />;
     }
 
     if (loading) {
@@ -108,6 +102,9 @@ export default function ProfilePage() {
                                     <Edit size={16} /> Edit Profile
                                 </Button>
                             </Link>
+                            <Button onClick={() => signOut()} variant="outline" className="w-full flex gap-2">
+                                <Edit size={16} /> Sign Out
+                            </Button>
                         </div>
                     </Card>
                 </div>

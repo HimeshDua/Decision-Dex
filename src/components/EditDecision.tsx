@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { useSession } from 'next-auth/react';
 
 type ProCon = { id: string; content: string };
 
@@ -44,19 +43,18 @@ export default function EditDecision({ decision }: { decision: Decision }) {
         setTitle(decision.title);
         setDescription(decision.userDecision);
         setStatus(decision.status);
-        // Map over the incoming options to ensure the correct structure for the state
         setOptions(decision.options.map(option => ({
             id: option.id,
             title: option.title,
-            pros: option.pros.map(pro => ({ ...pro })), // Create a new array of objects
-            cons: option.cons.map(con => ({ ...con })), // Create a new array of objects
+            pros: option.pros.map(pro => ({ ...pro })),
+            cons: option.cons.map(con => ({ ...con })),
         })));
     }, [decision]);
 
-    const userId = useSession().data?.user.id;
+    // const userId = useSession().data?.user.id;
 
     // Option handlers
-    const addOption = () => setOptions([...options, { id: nanoid(), title: '', pros: [], cons: [] }]); // Initialize with empty arrays of objects
+    const addOption = () => setOptions([...options, { id: nanoid(), title: '', pros: [], cons: [] }]);
     const removeOption = (index: number) => setOptions(options.filter((_, i) => i !== index));
     const updateOption = (index: number, field: keyof Omit<Option, 'pros' | 'cons'>, value: string) => {
         const updated: any = [...options];
@@ -67,13 +65,13 @@ export default function EditDecision({ decision }: { decision: Decision }) {
     // List item handlers (pros/cons)
     const updateListItem = (optionIndex: number, type: 'pros' | 'cons', listIndex: number, value: string) => {
         const updated = [...options];
-        updated[optionIndex][type][listIndex].content = value; // Access the 'content' property
+        updated[optionIndex][type][listIndex].content = value;
         setOptions(updated);
     };
 
     const addListItem = (optionIndex: number, type: 'pros' | 'cons') => {
         const updated = [...options];
-        updated[optionIndex][type].push({ id: nanoid(), content: '' }); // Add a new object
+        updated[optionIndex][type].push({ id: nanoid(), content: '' });
         setOptions(updated);
     };
 

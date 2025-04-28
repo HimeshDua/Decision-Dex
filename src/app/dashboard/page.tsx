@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import UnAuthenticatedPage from '@/components/UnAuthenticatedPage';
 
 export default function DashboardPage() {
     const { data: session, status: sessionStatus } = useSession();
@@ -94,14 +95,7 @@ export default function DashboardPage() {
     }
 
     if (sessionStatus === 'unauthenticated') {
-        return (
-            <div className="max-w-6xl mx-auto px-4 py-12 text-center">
-                <h1 className="text-2xl font-bold mb-4">Please sign in to view your dashboard</h1>
-                <Link href="/signin">
-                    <Button>Sign In</Button>
-                </Link>
-            </div>
-        );
+        return <UnAuthenticatedPage />;
     }
 
     return (

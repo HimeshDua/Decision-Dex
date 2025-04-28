@@ -9,6 +9,7 @@ import { PlusIcon, TrashIcon } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import UnAuthenticatedPage from '@/components/UnAuthenticatedPage';
 
 type Option = {
     id: number;
@@ -85,14 +86,7 @@ export default function NewDecisionPage() {
     };
 
     if (sessionStatus === 'unauthenticated') {
-        return (
-            <div className="max-w-6xl mx-auto px-4 py-12 text-center">
-                <h1 className="text-2xl font-bold mb-4">Please sign in to view your dashboard</h1>
-                <Link href="/signin">
-                    <Button>Sign In</Button>
-                </Link>
-            </div>
-        );
+        return <UnAuthenticatedPage />;
     }
     return (
         <div className="max-w-4xl mx-auto p-4 sm:p-6">
